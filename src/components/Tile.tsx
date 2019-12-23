@@ -1,11 +1,19 @@
 import React from "react";
-import {StyleSheet, TouchableOpacity, View} from "react-native";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import colors from "../shared/utils/colors";
 import helpers from "../shared/utils/helpers";
 
-const Tile = () => {
+interface Props {
+    isActive?: boolean
+}
+
+const Tile = (props: Props) => {
     return (
-        <TouchableOpacity style={styles.container}></TouchableOpacity>
+        <View style={styles.container}>
+            {props.isActive ? <TouchableOpacity style={styles.activeContainer}></TouchableOpacity> :
+                <TouchableOpacity style={styles.disable}></TouchableOpacity>}
+
+        </View>
     )
 };
 export default Tile;
@@ -13,8 +21,16 @@ export default Tile;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.tintColor,
         margin: helpers.margin.xs,
-        borderRadius: helpers.radius.small
+    },
+    activeContainer: {
+        flex: 1,
+        borderRadius: helpers.radius.small,
+        backgroundColor: colors.missedColor,
+    },
+    disable: {
+        flex: 1,
+        borderRadius: helpers.radius.small,
+        backgroundColor: colors.tintColor,
     }
 });
