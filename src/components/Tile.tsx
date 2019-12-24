@@ -4,14 +4,20 @@ import colors from "../shared/utils/colors";
 import helpers from "../shared/utils/helpers";
 
 interface Props {
-    isActive?: boolean
+    isActive: boolean
+    coordinates: Array<number>,
+    onPress: () => void
 }
 
 const Tile = (props: Props) => {
     return (
         <View style={styles.container}>
-            {props.isActive ? <TouchableOpacity style={styles.activeContainer}></TouchableOpacity> :
-                <TouchableOpacity style={styles.disable}></TouchableOpacity>}
+            {props.isActive ?
+                <TouchableOpacity style={styles.activeContainer} onPress={() => props.onPress()}></TouchableOpacity>
+                :
+                <TouchableOpacity style={styles.disable}>
+                    <Text>{props.coordinates}</Text>
+                </TouchableOpacity>}
 
         </View>
     )
@@ -26,7 +32,7 @@ const styles = StyleSheet.create({
     activeContainer: {
         flex: 1,
         borderRadius: helpers.radius.small,
-        backgroundColor: colors.missedColor,
+        backgroundColor: colors.pendingColor,
     },
     disable: {
         flex: 1,
