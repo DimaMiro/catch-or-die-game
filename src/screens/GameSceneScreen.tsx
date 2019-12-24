@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, Text, View} from "react-native";
+import {Alert, StyleSheet, Text, View} from "react-native";
 import colors from "../shared/utils/colors";
 import helpers from "../shared/utils/helpers";
 
@@ -19,6 +19,7 @@ interface State {
 }
 
 export default class GameSceneScreen extends React.Component<Props, State> {
+    private timer: number;
 
     constructor(props){
         super(props);
@@ -29,13 +30,14 @@ export default class GameSceneScreen extends React.Component<Props, State> {
             saved: [],
             mode: {
                 name: 'Ease',
-                field: 3,
+                field: 7,
                 delay: 2000
             }
         }
     }
     componentDidMount(): void {
-        this.randomHero()
+        this.randomHero();
+        this.startCounting();
     }
 
     renderScene(){
@@ -43,22 +45,43 @@ export default class GameSceneScreen extends React.Component<Props, State> {
         for(let r = 0; r < this.state.mode.field; r++) {
             const tilesForRender = [];
             for(let i = 0; i < this.state.mode.field; i++){
-                tilesForRender.push(<Tile coordinates={[r, i]} key={i} isHero={JSON.stringify([r, i]) === JSON.stringify(this.state.heroCoordinates)} isSaved={this.isHeroExistInArray(this.state.saved, [r,i])} onPress={() => this.handleHeroPress()}/>)
+                tilesForRender.push(<Tile coordinates={[r, i]} key={i}
+                                          isHero={JSON.stringify([r, i]) === JSON.stringify(this.state.heroCoordinates)}
+                                          isSaved={this.isHeroExistInArray(this.state.saved, [r,i])}
+                                          isMissed={this.isHeroExistInArray(this.state.missed, [r,i])}
+                                          onPress={() => this.handleHeroPress()}/>)
             }
             rowsForRender.push(<View key={r} style={styles.row}>{tilesForRender}</View>)
         }
         return rowsForRender
     }
+    startCounting(){
+        if (this.state.pastHeroes.length < Math.pow(this.state.mode.field, 2)) {
+            this.timer = setTimeout(() => {
+                this.state.missed.push(this.state.heroCoordinates);
+                this.randomHero();
+                this.startCounting();
+            }, this.state.mode.delay);
+        } else {
+            console.log('END GAME startCounting')
+        }
+    }
 
     handleHeroPress(){
-        this.state.saved.push(this.state.heroCoordinates);
-        console.log('SAVED'+this.state.saved);
-        this.randomHero()
+        if (this.state.pastHeroes.length < Math.pow(this.state.mode.field, 2)) {
+            this.state.saved.push(this.state.heroCoordinates);
+            this.randomHero();
+            clearInterval(this.timer)
+            this.startCounting()
+        } else {
+            console.log('END GAME handleHeroPress')
+        }
     }
 
     randomHero(){
         const newHero = [Math.floor(Math.random() * this.state.mode.field), Math.floor(Math.random() * this.state.mode.field)];
         if (!this.isHeroExistInArray(this.state.pastHeroes, newHero)) {
+            console.log('RANDOM')
             this.setState(prevState => ({
                 heroCoordinates: newHero,
                 pastHeroes: [...prevState.pastHeroes, newHero]
@@ -67,7 +90,7 @@ export default class GameSceneScreen extends React.Component<Props, State> {
             if (this.state.pastHeroes.length < Math.pow(this.state.mode.field, 2)) {
                 this.randomHero();
             } else {
-                console.log('END GAME')
+                console.log('END GAME randomHero')
             }
         }
     }
@@ -84,7 +107,6 @@ export default class GameSceneScreen extends React.Component<Props, State> {
     render() {
         return(
             <View style={styles.container}>
-
                 <View style={styles.scene}>
                     {this.renderScene()}
                 </View>
