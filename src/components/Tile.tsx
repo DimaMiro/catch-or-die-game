@@ -4,7 +4,8 @@ import colors from "../shared/utils/colors";
 import helpers from "../shared/utils/helpers";
 
 interface Props {
-    isHero: boolean
+    isHero: boolean,
+    isSaved?: boolean,
     coordinates: Array<number>,
     onPress: () => void
 }
@@ -15,7 +16,10 @@ const Tile = (props: Props) => {
             {props.isHero ?
                 <TouchableOpacity style={styles.heroContainer} onPress={() => props.onPress()}></TouchableOpacity>
                 :
-                <View style={styles.disable}></View>}
+                props.isSaved ?
+                    <View style={styles.savedContainer}></View>
+                    :
+                    <View style={styles.disable}></View>}
 
         </View>
     )
@@ -36,5 +40,10 @@ const styles = StyleSheet.create({
         flex: 1,
         borderRadius: helpers.radius.small,
         backgroundColor: colors.tintColor,
+    },
+    savedContainer: {
+        flex: 1,
+        borderRadius: helpers.radius.small,
+        backgroundColor: colors.savedColor,
     }
 });

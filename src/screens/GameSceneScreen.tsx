@@ -39,29 +39,32 @@ export default class GameSceneScreen extends React.Component<Props, State> {
     }
 
     renderScene(){
-        // console.log('Past' + this.state.pastHeroes);
         const rowsForRender = [];
         for(let r = 0; r < this.state.mode.field; r++) {
             const tilesForRender = [];
             for(let i = 0; i < this.state.mode.field; i++){
-                tilesForRender.push(<Tile coordinates={[r, i]} key={i} isHero={JSON.stringify([r, i]) === JSON.stringify(this.state.heroCoordinates)} onPress={() => this.randomHero()}/>)
+                tilesForRender.push(<Tile coordinates={[r, i]} key={i} isHero={JSON.stringify([r, i]) === JSON.stringify(this.state.heroCoordinates)} isSaved={this.isHeroExistInArray(this.state.saved, [r,i])} onPress={() => this.handleHeroPress()}/>)
             }
             rowsForRender.push(<View key={r} style={styles.row}>{tilesForRender}</View>)
         }
         return rowsForRender
     }
 
+    handleHeroPress(){
+        this.state.saved.push(this.state.heroCoordinates);
+        console.log('SAVED'+this.state.saved);
+        this.randomHero()
+    }
+
     randomHero(){
         const newHero = [Math.floor(Math.random() * this.state.mode.field), Math.floor(Math.random() * this.state.mode.field)];
-        console.log(this.isHeroExistInPastHeroesArray(newHero));
-        if (!this.isHeroExistInPastHeroesArray(newHero)) {
-            console.log('PAST' + this.state.pastHeroes);
+        if (!this.isHeroExistInArray(this.state.pastHeroes, newHero)) {
             this.setState(prevState => ({
                 heroCoordinates: newHero,
                 pastHeroes: [...prevState.pastHeroes, newHero]
             }));
         } else {
-            if (Math.pow(this.state.mode.field, this.state.mode.field) < this.state.pastHeroes.length) {
+            if (this.state.pastHeroes.length < Math.pow(this.state.mode.field, 2)) {
                 this.randomHero();
             } else {
                 console.log('END GAME')
@@ -69,9 +72,9 @@ export default class GameSceneScreen extends React.Component<Props, State> {
         }
     }
 
-    isHeroExistInPastHeroesArray(newHero) {
-        for (let i = 0; i < this.state.pastHeroes.length; i++){
-            if (JSON.stringify(this.state.pastHeroes[i]) === JSON.stringify(newHero)) {
+    isHeroExistInArray(array, newHero) {
+        for (let i = 0; i < array.length; i++){
+            if (JSON.stringify(array[i]) === JSON.stringify(newHero)) {
                 return true;
             }
         }
