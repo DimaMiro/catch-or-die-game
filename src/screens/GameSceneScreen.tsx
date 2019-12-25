@@ -32,7 +32,7 @@ export default class GameSceneScreen extends React.Component<Props, State> {
             saved: [],
             mode: {
                 name: 'Ease',
-                field: 3,
+                field: 5,
                 delay: 800
             },
             winner: null
@@ -122,7 +122,7 @@ export default class GameSceneScreen extends React.Component<Props, State> {
             saved: [],
             mode: {
                 name: 'Ease',
-                field: 3,
+                field: this.state.mode.field,
                 delay: 800
             },
             winner: null
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     },
     button: {
         position: 'absolute',
-        bottom: helpers.margin.xxl,
+        bottom: helpers.margin.xl,
         left: helpers.padding.l,
     },
     secondaryButton: {
