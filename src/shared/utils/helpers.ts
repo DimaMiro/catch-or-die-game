@@ -17,7 +17,8 @@ export default {
         s: 8,
         m: 16,
         l: 24,
-        xl: 32,
+        xl: 44,
+        xxl: 160,
     },
     padding: {
         s: 8,
