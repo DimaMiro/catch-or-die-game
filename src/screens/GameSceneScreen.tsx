@@ -4,14 +4,17 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 import colors from "../shared/utils/colors";
 import helpers from "../shared/utils/helpers";
 
+
 import Tile from "../components/Tile";
 import {GameMode} from "../shared/interfaces/gameMode.interface";
 
 interface Props {
     navigation: any,
+    username: string,
     mode: GameMode
 }
 interface State {
+    username: string,
     heroCoordinates: Array<number>,
     pastHeroes: Array<Array<number>>,
     missed: Array<Array<number>>,
@@ -26,15 +29,12 @@ export default class GameSceneScreen extends React.Component<Props, State> {
     constructor(props){
         super(props);
         this.state = {
+            username: this.props.navigation.getParam('values').username,
             heroCoordinates: [],
             pastHeroes: [],
             missed: [],
             saved: [],
-            mode: {
-                name: 'Ease',
-                field: 5,
-                delay: 800
-            },
+            mode: this.props.navigation.getParam('values').mode,
             winner: null
         }
     }
