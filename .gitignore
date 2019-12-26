@@ -1,5 +1,5 @@
 node_modules/**/*
-./src/shared/utils/api.config.ts
+src/shared/utils/api.config.ts
 .idea
 .expo/*
 .expo-shared/*
