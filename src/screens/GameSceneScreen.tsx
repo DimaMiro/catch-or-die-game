@@ -1,11 +1,12 @@
 import React from "react";
-import {Alert, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Alert, StyleSheet, Text, View} from "react-native";
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import colors from "../shared/utils/colors";
 import helpers from "../shared/utils/helpers";
 
 
 import Tile from "../components/Tile";
+import Button from "../shared/components/Button";
 import {GameMode} from "../shared/interfaces/gameMode.interface";
 
 interface Props {
@@ -146,9 +147,20 @@ export default class GameSceneScreen extends React.Component<Props, State> {
                 <View style={styles.scene}>
                     {this.renderScene()}
                 </View>
-                <TouchableOpacity style={[styles.secondaryButton, styles.button]} onPress={()=>this.resetGame()}>
-                    <Text style={styles.buttonTitle}>Reset</Text>
-                </TouchableOpacity>
+                <View style={styles.buttonContainer}>
+                    {this.state.winner !== null && <Button
+                            title={'Share'}
+                            type={'primary'}
+                            additionalStyle={styles.button}
+                            onPressAction={()=>this.resetGame()}/>}
+
+                    <Button
+                        title={'Reset'}
+                        type={'secondary'}
+                        additionalStyle={styles.button}
+                        onPressAction={()=>this.resetGame()}/>
+                </View>
+
             </View>
 
         );
@@ -186,22 +198,13 @@ const styles = StyleSheet.create({
         margin: helpers.margin.xs,
         borderRadius: helpers.radius.small
     },
-    button: {
+    buttonContainer: {
         position: 'absolute',
         bottom: helpers.margin.xl,
         left: helpers.padding.l,
+        width: '100%'
     },
-    secondaryButton: {
-        justifyContent: 'center',
-        height: helpers.size.xxl,
-        width: '100%',
-        backgroundColor: colors.tintColor,
-        borderRadius: helpers.radius.normal,
-        paddingHorizontal: helpers.padding.m,
-    },
-    buttonTitle: {
-        color: 'white',
-        fontSize: helpers.fonSize.p,
-        textAlign: 'center',
+    button: {
+        marginTop: helpers.margin.s,
     },
 });

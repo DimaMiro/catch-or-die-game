@@ -7,12 +7,9 @@ import {
     Keyboard,
     Text,
     TouchableOpacity,
-    Picker,
     ActionSheetIOS,
-    TextInput
 } from 'react-native';
 
-import { Formik } from 'formik';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 import ApiService from "../shared/services/api.service";
@@ -131,7 +128,6 @@ const styles = StyleSheet.create({
     },
     pickerContainer: {
         marginTop: helpers.margin.s,
-
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
