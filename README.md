@@ -17,7 +17,7 @@ Test task.
 4. Install expo-cli
 5. Run following command in project directory:
 > `yarn install`<br/>
-6. In `src/shared/utils` directory create a new file `api.config.ts` and paste your github access token there like this:
+6. In `src/shared/utils` directory create a new file `api.config.ts` and paste your domain address there like this:
 ```typescript
 export const API_URL = 'https://your-domain.com/';
 ```
