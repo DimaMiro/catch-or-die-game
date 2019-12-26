@@ -10,6 +10,14 @@ function get(path: string) {
         });
 }
 
+function post(path: string, params: object) {
+    return fetch(API_URL + path, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params),
+    })
+}
+
 function getGameSettingsAsync(){
     return get('game-settings')
 }
@@ -18,8 +26,13 @@ function getWinnersAsync(){
     return get('winners')
 }
 
+function postResultAsync(winner: object){
+    return post('winners', winner)
+}
+
 const ApiService = {
     getGameSettingsAsync,
     getWinnersAsync,
+    postResultAsync
 }
 export default ApiService

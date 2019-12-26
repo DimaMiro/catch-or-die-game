@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "date-fns": "^2.8.1",
     "expo": "~36.0.0",
     "formik": "^2.0.8",
     "react": "~16.9.0",

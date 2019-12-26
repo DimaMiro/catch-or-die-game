@@ -3,11 +3,13 @@ import {Alert, StyleSheet, Text, View} from "react-native";
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import colors from "../shared/utils/colors";
 import helpers from "../shared/utils/helpers";
+import { format } from 'date-fns'
 
 
 import Tile from "../components/Tile";
 import Button from "../shared/components/Button";
 import {GameMode} from "../shared/interfaces/gameMode.interface";
+import ApiService from "../shared/services/api.service";
 
 interface Props {
     navigation: any,
@@ -102,13 +104,11 @@ export default class GameSceneScreen extends React.Component<Props, State> {
     }
 
     checkForWinner(){
-        if(this.state.missed.length >= Math.pow(this.state.mode.field, 2) / 2){
-            console.log('Computer WIN')
+        if(this.state.missed.length >= Math.floor(Math.pow(this.state.mode.field, 2) / 2)){
             this.setState({
                 winner: 'computer'
             })
-        } else if(this.state.saved.length >= Math.pow(this.state.mode.field, 2) / 2){
-            console.log('User WIN')
+        } else if(this.state.saved.length >= Math.floor(Math.pow(this.state.mode.field, 2) / 2)){
             this.setState({
                 winner: 'user'
             })
@@ -121,11 +121,7 @@ export default class GameSceneScreen extends React.Component<Props, State> {
             pastHeroes: [],
             missed: [],
             saved: [],
-            mode: {
-                name: 'Ease',
-                field: this.state.mode.field,
-                delay: 800
-            },
+            mode: this.props.navigation.getParam('values').mode,
             winner: null
         });
         this.randomHero();
@@ -149,10 +145,16 @@ export default class GameSceneScreen extends React.Component<Props, State> {
                 </View>
                 <View style={styles.buttonContainer}>
                     {this.state.winner !== null && <Button
-                            title={'Share'}
+                            title={'Share result'}
                             type={'primary'}
                             additionalStyle={styles.button}
-                            onPressAction={()=>this.resetGame()}/>}
+                            onPressAction={()=>{
+                                const currentDate = format(new Date(), 'HH:mm; dd MMMM yyyy');
+                                ApiService.postResultAsync({
+                                    winner: this.state.winner === 'user' ? this.state.username : this.state.winner,
+                                    date: currentDate
+                                }).then(this.props.navigation.navigate('Winners'));
+                            }}/>}
 
                     <Button
                         title={'Reset'}
